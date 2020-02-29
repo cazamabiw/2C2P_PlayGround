@@ -18,7 +18,15 @@ namespace _2C2PTest.Data
 
         public void CreateLog(string msg, string category, string description)
         {
-            throw new NotImplementedException();
+            var log = new SystemLog();
+
+            log.Id = Guid.NewGuid().ToString();
+            log.LogDateUTC = DateTime.UtcNow;
+            log.Description = description;
+            log.ErrorMsg = msg;
+            log.Catagory = category;
+            _context.SystemLog.Add(log);
+            _context.SaveChanges();
         }
 
         public List<TransactionResponse> GetAll()
@@ -54,7 +62,29 @@ namespace _2C2PTest.Data
 
         public Result SaveTransactions(List<Transaction> transactions)
         {
-            throw new NotImplementedException();
+            Result res = new Result();
+            try
+            {
+                foreach (var tran in transactions)
+                {
+                    if (!_context.Transaction.Any(f => f.TransactionId == tran.TransactionId))
+                    {
+                        _context.Transaction.Add(tran);
+                        _context.SaveChanges();
+
+                    }
+
+                }
+                res.Success = true;
+                res.Msg = "Sucess";
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Success = false;
+                res.Msg = ex.Message;
+                return res;
+            }
         }
     }
 }
