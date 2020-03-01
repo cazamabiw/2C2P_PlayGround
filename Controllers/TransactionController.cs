@@ -27,5 +27,26 @@ namespace _2C2PTest.Controllers
         {
             return _tm.GetAll();
         }
+
+        [HttpGet]
+        [Route("api/Transaction/GetByCurrency")]
+        public List<TransactionResponse> GetByCurrency(string query)
+        {
+            return _tm.GetByCurrency(query);
+        }
+
+        [HttpGet]
+        [Route("api/Transaction/GetByDateRange")]
+        public List<TransactionResponse> GetByDateRange(DateTime start, DateTime end)
+        {
+            return _tm.GetByDateRange(start,end);
+        }
+
+        [HttpGet]
+        [Route("api/Transaction/GetByStatus")]
+        public List<TransactionResponse> GetByStatus(string query)
+        {
+            return _tm.GetBystatus(query);
+        }
     }
 }

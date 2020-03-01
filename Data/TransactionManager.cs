@@ -31,7 +31,7 @@ namespace _2C2PTest.Data
 
         public List<TransactionResponse> GetAll()
         {
-            var data = _context.Transaction.ToList();
+            var data = _context.Transaction.OrderBy(f => f.TransactionDate).ToList();
             var tranResponse = new List<TransactionResponse>();
             tranResponse = data.ConvertAll(f => new TransactionResponse
             {
@@ -47,17 +47,47 @@ namespace _2C2PTest.Data
 
         public List<TransactionResponse> GetByCurrency(string query)
         {
-            throw new NotImplementedException();
+            var data = _context.Transaction.Where(f=>f.CurrencyCode == query).OrderBy(f=>f.TransactionDate).ToList();
+            var tranResponse = new List<TransactionResponse>();
+            tranResponse = data.ConvertAll(f => new TransactionResponse
+            {
+                id = f.TransactionId,
+                payment = String.Format("{0} {1}", f.Amount.ToString(), f.CurrencyCode),
+                Status = f.Status
+
+            });
+
+            return tranResponse;
         }
 
         public List<TransactionResponse> GetByDateRange(DateTime start, DateTime end)
         {
-            throw new NotImplementedException();
+            var data = _context.Transaction.Where(f => f.TransactionDate >= start && f.TransactionDate <= end).OrderBy(f => f.TransactionDate).ToList();
+            var tranResponse = new List<TransactionResponse>();
+            tranResponse = data.ConvertAll(f => new TransactionResponse
+            {
+                id = f.TransactionId,
+                payment = String.Format("{0} {1}", f.Amount.ToString(), f.CurrencyCode),
+                Status = f.Status
+
+            });
+
+            return tranResponse;
         }
 
         public List<TransactionResponse> GetBystatus(string query)
         {
-            throw new NotImplementedException();
+            var data = _context.Transaction.Where(f => f.Status == query).OrderBy(f => f.TransactionDate).ToList();
+            var tranResponse = new List<TransactionResponse>();
+            tranResponse = data.ConvertAll(f => new TransactionResponse
+            {
+                id = f.TransactionId,
+                payment = String.Format("{0} {1}", f.Amount.ToString(), f.CurrencyCode),
+                Status = f.Status
+
+            });
+
+            return tranResponse;
         }
 
         public Result SaveTransactions(List<Transaction> transactions)
