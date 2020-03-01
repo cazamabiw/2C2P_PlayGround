@@ -30,11 +30,16 @@ namespace _2C2PTest.Controllers
             Result result;
             try
             {
+                if(file == null)
+                {
+                    ViewBag.validatetxt = "Please choose your file";
+                    return View();
+                }
                 string fileExtension = Path.GetExtension(file.FileName);
 
                 if (file.Length > 1000000)
                 {
-                    ViewBag.validatesize = "File size is max more than 1 MB !!!!";
+                    ViewBag.validatetxt = "File size is max more than 1 MB !!!!";
                     return View();
 
                 }
