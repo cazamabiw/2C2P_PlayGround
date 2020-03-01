@@ -167,7 +167,7 @@ namespace _2C2PTest.Data
                 res.tran.TransactionId = fields[0].ToString();
                 res.tran.Amount = decimal.Parse(fields[1].ToString());
                 res.tran.CurrencyCode = fields[2].ToString();
-                res.tran.TransactionDate = DateTime.Parse(fields[3].ToString());
+                res.tran.TransactionDate = DateTime.ParseExact(fields[3], "dd/MM/yyyy HH:ss:mm", CultureInfo.InvariantCulture);
                 res.tran.Status = MapStatus(fields[4]).ToString();
             }
             return res;
