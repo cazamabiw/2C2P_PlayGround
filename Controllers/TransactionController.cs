@@ -5,21 +5,49 @@ using System.Threading.Tasks;
 using _2C2PTest.Data;
 using _2C2PTest.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace _2C2PTest.Controllers
 {
     public class TransactionController : Controller
     {
         ITransactionManager _tm;
-        public TransactionController(ITransactionManager tm)
-        {
-       
+        MyDbContext _context;
+        public TransactionController(ITransactionManager tm,MyDbContext context)
+        {  
             _tm = tm;
+            _context = context;
         }
-        public IActionResult Index()
+        public ActionResult Index(string categoryItem, DateTime startDate, DateTime endDate, string codeItem, string statusItem)
         {
-            return View();
+
+            var trans = GetAll();
+
+            if (categoryItem == "Currency")
+            {
+                trans = GetByCurrency(codeItem);
+            }
+            else if (categoryItem == "Date range")
+            {
+
+                trans = GetByDateRange(startDate, endDate);
+            }
+            else if (categoryItem == "Status")
+            {
+                trans = GetByStatus(statusItem);
+            }
+
+            var tranVM = new TransactionViewModel
+            {
+                Category = new SelectList(new List<string>() { "Currency", "Date range", "Status" }),
+                Transactions = trans,
+                Status = new SelectList(new List<string>() { "A", "R", "D" }),
+                Currency = new SelectList(_context.CurrencyCode.Select(f => f.Code))
+            };
+            return View(tranVM);
         }
+
+
 
         [HttpGet]
         [Route("api/Transaction/GetAll")]

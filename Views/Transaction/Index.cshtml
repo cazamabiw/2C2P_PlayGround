@@ -1,7 +1,97 @@
-﻿
+﻿@model TransactionViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<h3>Index</h3>
+<br />
+<br />
+<h4>Transaction</h4>
+<br />
 
+<form asp-controller="Transaction" asp-action="Index" method="get">
+    <p>
+        <select id="category" asp-for="CategoryItem" asp-items="Model.Category">
+            <option value="">All</option>
+        </select>
+        <select id="currency" asp-for="CodeItem" asp-items="Model.Currency">
+        </select>
+        <select id="status" asp-for="StatusItem" asp-items="Model.Status">
+        </select>
+        <span id="dateForm">
+            <input asp-for="StartDate" />
+            <input asp-for="EndDate" />
+        </span>
+        <input type="submit"  class="btn btn-primary"  style="margin-bottom:12px" value="Display" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Payment
+            </th>
+            <th>
+                Status
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Transactions)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.payment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        var text = "All";
+        $("#currency").hide();
+        $("#status").hide();
+        $("#dateForm").hide();
+        $("#category").change(function () {
+            var c = document.getElementById("category");
+            text = c.options[c.selectedIndex].value;
+            if (text == 'Date range') {
+                $("#currency").hide();
+                $("#status").hide();
+                $("#dateForm").show();
+            }
+            else if (text == 'Status') {
+                $("#currency").hide();
+                $("#status").show();
+                $("#dateForm").hide();
+            }
+            else if (text == 'Currency') {
+                $("#currency").show();
+                $("#status").hide();
+                $("#dateForm").hide();
+            }
+            else {
+                $("#currency").hide();
+                $("#status").hide();
+                $("#dateForm").hide();
+            }
+        });
+
+    });
+
+</script>
